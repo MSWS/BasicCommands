@@ -1,0 +1,76 @@
+name: BasicCommands
+main: org.mswsplex.msws.basic.Main
+version: 1.0
+description: Basic Commands Essential for a server
+commands:
+   fly:
+      usage: /<command> <Player>
+      description: Toggle flight
+   kill:
+      usage: /<command> [All/Range/Players/Entities]
+      description: Kills specific entities
+   clear:
+      usage: /<command> <Player>
+      description: Clears a player's inventory
+   teleport:
+      usage: /<command> [Player/All] <Player>
+      description: Teleports players
+      aliases: [tp]
+   message:
+      usage: /<command> [Player] [Message]
+      aliases: [tell,msg,w]
+      description: Message a player
+   reply:
+      usage: /<command> [Message]
+      aliases: [r]
+      description: Message your last messaged player
+   time:
+      usage: /<command> [set/add/stop/start] <day/night>
+      description: Manage the in-game time
+   freeze:
+      usage: /<command> [Player]
+      description: Freeze players
+   invsee:
+      usage: /<command> [Player]
+      description: View the inventories of other players
+   staff:
+      usage: /<command>
+      description: Displays a GUI showcasing the staff
+   gamemode:
+      usage: /<command> [survival/creative/adventure/spectator] <Player>
+      description: Changes a player's gamemode
+      aliases: [gm]
+   spawn:
+      usage: /<command> [Entity/item] <Amount/type>
+      description: Spawns in items/mobs
+   heal:
+      usage: /<command> <Player>
+      description: Heals a player
+   god:
+      usage: /<command> <Player>
+      description: Make players invulnerable
+   enchant:
+      usage: /<command> [Enchantment] <Level>
+      description: Enchant item in your hand
+   seen:
+      usage: /<command> [Player]
+      description: Get when a player last joined
+   count:
+      usage: /<command>
+      description: Gets the total amount of players that have joined
+   a:
+      usage: /<command> [Message]
+      description: Staff chat
+   ma:
+      usage: /<command> [Player] [Message]
+      description: Staff Message
+   ra:
+      usage: /<command> [Message]
+      description: Staff Respond
+   vanish:
+      usage: /<command>
+      description: Become invisible to all players
+      aliases: [v]
+   chatslow:
+      usage: /<command> <Time>
+      description: Slow down chat by a specified amount

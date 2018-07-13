@@ -1,0 +1,113 @@
+NoPermission: '%prefix% You do not have permission to do this.'
+MustBePlayer: '%prefix% You must be a player.'
+Unknown:
+  Player: '&cUnknown Player.'
+  ListPlayer: '&cError, &e%size% &cplayer names matched.'
+Command:
+  Enable: '&aenabled&7'
+  Disable: '&cdisabled&7'
+  Flight:
+    Prefix: '&4[&cFlight&4]&7'
+    Sender: '%prefix% You %status% &e%player%&7''%s% flight.'
+    Receiver: '%prefix% &7Your flight has been %status% by &e%sender%&7.'
+    Self: '%prefix% You %status% your flight.'
+  Kill:
+    Prefix: '&4[&cKill&4]&7'
+    Sender: '%prefix% You ended &e%player%&7''%s% life.'
+    Receiver: '%prefix% &e%sender% &7killed you.'
+    Misc: '%prefix% You killed all &e%type%&7.'
+    Self: '%prefix% You committed suicide.'
+  Clear:
+    Prefix: '&4[&cInventory&4]&7'
+    Sender: '%prefix% You cleared &e%player%&7''&7%s% inventory.'
+    Receiver: '%prefix% &e%sender% &7has cleared your inventory.'
+    Self: '%prefix% You cleared your own inventory.'
+    Unknown: '%prefix% Unknown Material.'
+  Teleport:
+    Prefix: '&4[&cTeleport&4]&7'
+    Sender: '%prefix% You teleported &e%subject%&7 to &e%target%&7.'
+    Receiver: '%prefix% You were teleported to &e%target%&7 by &e%sender%&7.'
+    Self: '%prefix% You teleported to &e%target%&7.'
+  Message:
+    Sender: '&7&l%sender% &7> &8&l%receiver%&a %message%'
+    Receiver: '&8&l%sender% &7> &7&l%receiver%&e %message%'
+    NoRecent: '&cYou have not messaged anyone recently.'
+    Offline: '&cThat player is no longer online.'
+  Time:
+    Prefix: '&4[&cTime&4]&7'
+    Info: '%prefix% The current world time is &e%time%&7 (or) &e%ticks% ticks&7.'
+    Set: '%prefix% You set the time to &e%time%&7.'
+    Toggle: '%prefix% You %status% the passage of time.'
+  Freeze:
+    Prefix: '&4[&cFreeze&5]&7'
+    Unable: '%prefix% You cannot freeze this player.'
+    Sender: '%prefix% &e%player%''%s% &bfreeze&7 is now %status%.'
+    Receiver: '%prefix% &e%sender% &7has %status% your freeze.'
+    Self: '%prefix% You %status% your own freeze... why?'
+    Message:
+    - '&c&l-=-=-=-=-=-=-WARNING-=-=-=-=-=-=-'
+    - '&eYou have been frozen, do &nnot&e disconnect'
+  Invsee:
+    Prefix: '&4[&cInvsee&4]&7'
+    Self: '%prefix% You can''t invsee yourself silly.'
+    Unable: '%prefix% You cannot invsee this player.'
+  Gamemode:
+    Prefix: '&4[&cGamemode&4]&7'
+    Self: '%prefix% You set your gamemode to &e%mode%&7.'
+    Check: '%prefix% &e%player%&7''%s% gamemode is &e%mode%&7.'
+    Sender: '%prefix% You set &e%player%''&7%s% gamemode to &e%mode%&7.'
+    Receiver: '%prefix% &e%sender%&7 has set your gamemode to &e%mode%&7.'
+    Unknown: '%prefix% Unknown gamemode.'
+  Spawn:
+    Prefix: '&4[&cSpawn&4]&7'
+    Spawn: '%prefix% You spawned &e%amo% %type%%s%&7.'
+    Unknown: '%prefix% Unknown entity type.'
+    MetMax: '%prefix% Entity Spawn limit reached, spawning &e%amo% instead&7.'
+  Heal:
+    Prefix: '&4[&cHeal&4]&7'
+    Sender: '%prefix% You healed &e%player%&7.'
+    Receiver: '%prefix% &e%sender% &7has healed you.'
+    Self: '%prefix% You healed yourself.'
+  God:
+    Prefix: '&4[&cGod&4]&7'
+    Sender: '%prefix% You %status% &e%player%&7''%s% God status.'
+    Receiver: '%prefix% &e%sender% &7has %status% your God status.'
+    Self: '%prefix% You %status% your God status.'
+  Enchant:
+    Prefix: '&4[&cEnchant&4]&7'
+    Unknown: '%prefix% Unknown enchantment.'
+    Self: '%prefix% Successfully enchanted item.'
+    InvalidHand: '%prefix% You must have an item in your hand.'
+    Remove: '%prefix% Successfully removed the enchantment.'
+    Clear: '%prefix% Successfully cleared all enchantments.'
+  Seen:
+    Prefix: '&4[&cSeen&4]&7'
+    NotJoined: '%prefix% That player has never joined the server.'
+    Seen: '%prefix% &e%player%&7 was last online &e%time% &7ago.'
+    Online: '%prefix% &e%player%&7 has been playing for &e%time%&7.'
+    Self: '%prefix% You''ve been playing for &e%time%&7.'
+  Count:
+    Prefix: '&4[&cCount&4]&7'
+    Count: '%prefix% There have been &e%total%&7 players online.'
+  A:
+    Prefix: '&4[&cStaff&4]&7'
+    Regular: '%prefix% %player-prefix%%player% %message%'
+    Sender: '%prefix% -> %target-prefix%%target% %message%'
+    Sender-Others: '%prefix% %sender-prefix%%sender% -> %target-prefix%%target% %message%'
+    Receiver: '%prefix% <- %sender-prefix%%sender% %message%'
+    NoRecent: '%prefix% You have not admin messaged anyone.'
+    Offline: '%prefix% That player is now offline.'
+  Vanish:
+    Prefix: '&4[&cVanish&4]&7'
+    Self: '%prefix% You %status% your vanish.'
+    Sender: '%prefix% You %status% &e%player%&7''%s% vanish.'
+    Receiver: '%prefix% &e%sender%&7 %status% &7your vanish.'
+  ChatSlow:
+    Prefix: '&4[&cChatSlow&4]&7'
+    Default: '%prefix% Defaulting to &e%time%&7.'
+    Enabled: '%prefix% &e%player% %status% &7chat slow for &a%time%&7.'
+    Disabled: '%prefix% &e%player% %status%&7 chat slow.'
+    Mute: '%prefix% &e%player% &7silenced chat.'
+    UnMute: '%prefix% &e%player% &7unsilenced chat.'
+    Slow: '%prefix% Please wait &a%time% &7to chat.'
+    Muted: '%prefix% Chat is disabled.'
