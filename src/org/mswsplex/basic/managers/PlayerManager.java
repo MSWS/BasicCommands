@@ -1,8 +1,12 @@
 package org.mswsplex.basic.managers;
 
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,11 +18,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 import org.mswsplex.basic.utils.MSG;
+import org.mswsplex.basic.utils.QRMap;
+import org.mswsplex.basic.utils.TOTP;
 import org.mswsplex.msws.basic.Main;
 
 import ru.tehkode.permissions.bukkit.PermissionsEx;
-
 
 public class PlayerManager {
 
@@ -63,38 +70,38 @@ public class PlayerManager {
 	}
 
 	public boolean isFrozen(OfflinePlayer player) {
-		if(getInfo(player, "frozen")==null) {
+		if (getInfo(player, "frozen") == null) {
 			setInfo(player, "frozen", false);
 			return false;
 		}
 		return getBoolean(player, "frozen");
 	}
-	
+
 	public boolean isGod(OfflinePlayer player) {
-		if(getInfo(player, "god")==null) {
+		if (getInfo(player, "god") == null) {
 			setInfo(player, "god", false);
 			return false;
 		}
 		return getBoolean(player, "god");
 	}
-	
+
 	public String getPrefix(Player player) {
-		if(Bukkit.getPluginManager().getPlugin("PermissionsEx")==null)
+		if (Bukkit.getPluginManager().getPlugin("PermissionsEx") == null)
 			return "";
 		return PermissionsEx.getUser(player).getPrefix();
 	}
-	
+
 	public boolean isVanished(OfflinePlayer player) {
-		if(getInfo(player, "vanished")==null) {
+		if (getInfo(player, "vanished") == null) {
 			setInfo(player, "vanished", false);
 			return false;
 		}
 		return getBoolean(player, "vanished");
 	}
-	
+
 	public int getVanishRank(Player player) {
-		for(int i=100;i>=0;i++) {
-			if(player.hasPermission("basic.vanish."+i))
+		for (int i = 100; i >= 0; i--) {
+			if (player.hasPermission("basic.vanish." + i))
 				return i;
 		}
 		return 0;
@@ -216,13 +223,70 @@ public class PlayerManager {
 	/**
 	 * Get whether an object is saveable in YAML
 	 * 
-	 * @param obj
-	 *            Object type to test
+	 * @param obj Object type to test
 	 * @return True if saveable, false otherwise
 	 */
 	public boolean isSaveable(Object obj) {
 		return (obj instanceof String || obj instanceof Integer || obj instanceof ArrayList || obj instanceof Boolean
 				|| obj == null || obj instanceof Double || obj instanceof Short || obj instanceof Long
 				|| obj instanceof Character);
+	}
+
+	@SuppressWarnings("deprecation")
+	public void setup2fa(Player player) {
+		removeInfo(player, "2fakey");
+		setInfo(player, "setup", true);
+		try {
+			String key = TOTP.generateBase32Secret();
+			for (String res : Main.plugin.lang.getStringList("Command.2FA.Setup")) {
+				MSG.tell(player, res.replace("%key%", key + ""));
+			}
+			try {
+				URL url = new URL(TOTP.qrImageUrl("MSWSServer@" + player.getName(), key));
+				BufferedImage image = ImageIO.read(url);
+				ItemStack i = new ItemStack(Material.MAP);
+				MapView view = Bukkit.createMap(player.getWorld());
+				view.getRenderers().clear();
+				view.addRenderer((MapRenderer) new QRMap(image));
+				Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> {
+					view.getRenderers().clear();
+				}, (long) 5);
+
+				i.setDurability(view.getId());
+				player.setItemInHand(i);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			setInfo(player, "2fakey", key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		setInfo(player, "login", true);
+	}
+
+	public void twoSuccess(Player player) {
+		MSG.tell(player, MSG.getString("Command.2FA.Success", "success").replace("%prefix%",
+				MSG.getString("Command.2FA.Prefix", "2fa")));
+		setInfo(player, "lastVerify", System.currentTimeMillis());
+		removeInfo(player, "login");
+		setInfo(player, "setup", null);
+		if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.MAP)
+			player.setItemInHand(new ItemStack(Material.AIR));
+	}
+
+	public static String getRankColor(int rank) {
+		if (rank == 1) {
+			return "&a";
+		} else if (rank == 2) {
+			return "&e";
+		} else if (rank == 3) {
+			return "&c";
+		} else if (rank <= 50) {
+			return "&2";
+		} else if (rank <= 100) {
+			return "&6";
+		} else {
+			return "&7";
+		}
 	}
 }

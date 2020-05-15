@@ -1,6 +1,16 @@
 package org.mswsplex.basic.utils;
 
+import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
+
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+
+
 public class Utils {
+	private static boolean bungeeApiPresent;
+	
 	public static String worldTime(long time) {
 		long gameTime = time, hours = gameTime / 1000 + 6, minutes = (gameTime % 1000) * 60 / 1000;
 		String ampm = "AM";
@@ -17,6 +27,18 @@ public class Utils {
 		String mm = "0" + minutes;
 		mm = mm.substring(mm.length() - 2, mm.length());
 		return hours + ":" + mm + " " + ampm;
+	}
+	
+	public static boolean isMaterial(String name) {
+		for (Material mat : Material.values())
+			if (mat.toString().equals(name))
+				return true;
+		return false;
+	}
+	
+	public static boolean isArmor(Material mat) {
+		return mat.name().contains("CHESTPLATE") || mat.name().contains("LEGGINGS") || mat.name().contains("HELMET")
+				|| mat.name().contains("BOOTS");
 	}
 	
 	public static String getEnchant(String name) {
@@ -91,4 +113,37 @@ public class Utils {
 		}
 		return name.toUpperCase();
 	}
+	
+	public static String parseDecimal(String name, int length) {
+		if (name.contains(".")) {
+			if (name.split("\\.")[1].length() > 2) {
+				name = name.split("\\.")[0] + "."
+						+ name.split("\\.")[1].substring(0, Math.min(name.split("\\.")[1].length(), length));
+			}
+		}
+		return name;
+	}
+	
+    public static String unpackMessage(final String json, final boolean denyEvents){
+        Validate.isTrue(bungeeApiPresent, "(Un)packing chat requires Spigot 1.7.10 or newer");
+        String text = "";
+        try {
+            BaseComponent[] parse;
+            for (int length = (parse = ComponentSerializer.parse(json)).length, i = 0; i < length; ++i) {
+                final BaseComponent comp = parse[i];
+                if ((comp.getHoverEvent() != null || comp.getClickEvent() != null) && denyEvents) {
+                }
+                text = String.valueOf(text) + comp.toLegacyText();
+            }
+        }
+        catch (Throwable t) {
+            MSG.log("Unable to parse JSON message. Got " + t.getMessage());
+        }
+        return text;
+    }
+    
+    public static String packMessage(final String message) {
+        Validate.isTrue(bungeeApiPresent, "(Un)packing chat requires Spigot 1.7.10 or newer");
+        return ComponentSerializer.toString(TextComponent.fromLegacyText(message));
+    }
 }

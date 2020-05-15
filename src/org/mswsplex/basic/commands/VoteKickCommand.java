@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.mswsplex.basic.managers.PlayerManager;
 import org.mswsplex.basic.utils.MSG;
@@ -24,7 +25,14 @@ public class VoteKickCommand implements CommandExecutor {
 			return true;
 		}
 		
-		Player target = null;
+		if(!(sender instanceof Player)) {
+			MSG.tell(sender, MSG.getString("MustBePlayer", "You must be a player"));
+			return true;
+		}
+		
+		
+		
+		Player player = (Player) sender, target = null;
 		List<Player> results = Bukkit.matchPlayer(args[0]);
 		if (results.size() == 1) {
 			target = results.get(0);
@@ -41,6 +49,29 @@ public class VoteKickCommand implements CommandExecutor {
 			MSG.noPerm(sender);
 			return true;
 		}
+		
+		
+		ConfigurationSection voteKicks = Main.plugin.data.getConfigurationSection("Players."+player.getUniqueId()+".votekicks");
+		int id = 0;
+		if(voteKicks!=null) {
+			int recentVotes = 0;
+			for(String res:voteKicks.getKeys(false)) {
+				if(System.currentTimeMillis()-voteKicks.getDouble(res+".time")<3.6e+6) {
+					recentVotes++;
+				}
+			}
+			if(recentVotes>2) {
+				MSG.tell(sender, MSG.getString("Command.VoteKick.Limit", "you've met the limit for voting"));
+				return true;
+			}
+			while(voteKicks.contains(id+""))
+				id++;
+		}
+		id++;
+		voteKicks.set(id+".uuid", target.getUniqueId()+"");
+		MSG.tell(sender, MSG.getString("Command.VoteKick.Voting", "you're voting to kick %player%")
+				.replace("%prefix%", MSG.getString("Command.VoteKick.Prefix", "VoteKick"))
+				.replace("%player%", target.getName()));
 		return true;
 	}
 }

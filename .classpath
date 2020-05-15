@@ -4,5 +4,12 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar"/>
 	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/PermissionsEx-1.23.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/NametagEdit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/ProtocolLib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/Factions.jar"/>
+	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/MassiveCore.jar"/>
+	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/Vault.jar"/>
+	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/BarAPI.jar"/>
+	<classpathentry kind="lib" path="C:/Users/imodm/Documents/API/Cardinal.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

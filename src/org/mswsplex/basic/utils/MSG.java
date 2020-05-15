@@ -2,17 +2,29 @@ package org.mswsplex.basic.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.mswsplex.basic.managers.PlayerManager;
+import org.mswsplex.basic.managers.TimeManager;
 import org.mswsplex.msws.basic.Main;
+
+import com.massivecraft.factions.entity.BoardColl;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MPlayer;
+import com.massivecraft.massivecore.ps.PS;
+
+import net.milkbowl.vault.economy.Economy;
 
 public class MSG {
 	public static String color(String msg) {
-		if (msg == null||msg.isEmpty())
+		if (msg == null || msg.isEmpty())
 			return null;
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
@@ -33,11 +45,11 @@ public class MSG {
 	}
 
 	public static String getString(String id, String def) {
-		return Main.plugin.lang.contains(id) ? Main.plugin.lang.getString(id) : "["+id+"] " + def;
+		return Main.plugin.lang.contains(id) ? Main.plugin.lang.getString(id) : "[" + id + "] " + def;
 	}
 
 	public static void tell(CommandSender sender, String msg) {
-		if (msg != null&&!msg.isEmpty())
+		if (msg != null && !msg.isEmpty())
 			sender.sendMessage(color(msg.replace("%prefix%", prefix())));
 	}
 
@@ -53,6 +65,12 @@ public class MSG {
 		for (Player target : Bukkit.getOnlinePlayers()) {
 			if (target.hasPermission(perm))
 				tell(target, msg);
+		}
+	}
+
+	public static void tell(String msg) {
+		for (Player target : Bukkit.getOnlinePlayers()) {
+			tell(target, msg);
 		}
 	}
 
@@ -75,7 +93,7 @@ public class MSG {
 			return "&cFalse&r";
 		}
 	}
-	
+
 	public static void sendHelp(CommandSender sender, int page, String command) {
 		if (!Main.plugin.lang.contains("Help." + command.toLowerCase())) {
 			tell(sender, getString("UnknownCommand", "There is no help available for this command."));
@@ -108,7 +126,7 @@ public class MSG {
 		if (command.equals("default"))
 			tell(sender, "&d&lPlugin &ev" + Main.plugin.getDescription().getVersion() + " &7created by &bMSWS");
 	}
-	
+
 	public static String progressBar(double prog, double total, int length) {
 		return progressBar("&a\u258D", "&c\u258D", prog, total, length);
 	}
@@ -148,5 +166,129 @@ public class MSG {
 			oldV = oldV * (10 * (newVer.length() - oldVer.length()));
 		}
 		return oldV < newV;
+	}
+
+	public static void nonSpam(Player player, String msg) {
+		PlayerManager pManager = new PlayerManager();
+		if (pManager.getDouble(player, msg + "time") == null) {
+			tell(player, msg);
+			pManager.setInfo(player, msg + "time", (double) System.currentTimeMillis());
+			return;
+		}
+		if (System.currentTimeMillis() - pManager.getDouble(player, msg + "time") > 2000) {
+			tell(player, msg);
+			pManager.setInfo(player, msg + "time", (double) System.currentTimeMillis());
+			return;
+		}
+	}
+
+	public static void nonSpam(Player player, String msg, double delay) {
+		PlayerManager pManager = new PlayerManager();
+		if (pManager.getDouble(player, msg) == null) {
+			tell(player, msg);
+			pManager.setInfo(player, msg, (double) System.currentTimeMillis());
+			return;
+		}
+		if (System.currentTimeMillis() - pManager.getDouble(player, msg) > delay) {
+			tell(player, msg);
+			pManager.setInfo(player, msg, (double) System.currentTimeMillis());
+			return;
+		}
+	}
+
+	public static String parseDecimal(String name, int length) {
+		if (name.contains(".")) {
+			if (name.split("\\.")[1].length() > 2) {
+				name = name.split("\\.")[0] + "."
+						+ name.split("\\.")[1].substring(0, Math.min(name.split("\\.")[1].length(), length));
+			}
+		}
+		return name;
+	}
+
+	static Runtime runtime = Runtime.getRuntime();
+	static Economy eco = Main.plugin.getEcononomy();
+	static PlayerManager pManager = new PlayerManager();
+
+	@SuppressWarnings("deprecation")
+	public static String parse(Player player, String entry) {
+		int ping = 0;
+		try {
+			Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
+			ping = (int) entityPlayer.getClass().getField("ping").get(entityPlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String color = "&a";
+		if (ping > 1000) {
+			color = "&4";
+		} else if (ping > 500) {
+			color = "&c";
+		} else if (ping > 300) {
+			color = "&e";
+		}
+		Block target = null;
+		try {
+			target = player.getTargetBlock((Set<Material>) null, 100);
+		} catch (Exception e) {
+		}
+		String result = MSG.color(entry.replace("%world%", player.getWorld().getName())
+				.replace("%time%", Utils.worldTime(player.getWorld().getTime()))
+				.replace("%online%", Bukkit.getOnlinePlayers().size() + "")
+				.replace("%rank%", pManager.getPrefix(player).equals("") ? "Default" : pManager.getPrefix(player))
+				.replace("%x%", Utils.parseDecimal(player.getLocation().getX() + "", 2))
+				.replace("%y%", Utils.parseDecimal(player.getLocation().getY() + "", 2))
+				.replace("%z%", Utils.parseDecimal(player.getLocation().getZ() + "", 2))
+				.replace("%clientground%", MSG.TorF(player.isOnGround()))
+				.replace("%serverground%", MSG.TorF(player.getLocation().getY() % .5 == 0))
+				.replace("%totalmemory%", runtime.totalMemory() / 1048576L + "")
+				.replace("%freememory%", runtime.freeMemory() / 1048576L + "")
+				.replace("%usedmemory%", (runtime.totalMemory() - runtime.freeMemory()) / 1048576L + "")
+				.replace("%memory%",
+						Utils.parseDecimal((((double) runtime.totalMemory() - (double) runtime.freeMemory())
+								/ (double) runtime.totalMemory()) * 100.0 + "", 2))
+				.replace("%ping%", color + ping).replace("%targetblock%", MSG.camelCase(target.getType().toString()))
+				.replace("%uuid%", player.getUniqueId() + "").replace("%flying%", MSG.TorF(player.isFlying()))
+				.replace("%pitch%", Utils.parseDecimal(player.getLocation().getPitch() + "", 2))
+				.replace("%yaw%", Utils.parseDecimal(player.getLocation().getYaw() + "", 2))
+				.replace("%vanish%", MSG.TorF(pManager.isVanished(player))));
+		if (!player.getName().equals(player.getDisplayName())) {
+			result = result.replace("%player%", player.getName() + " &3(&b" + player.getDisplayName() + "&3)");
+		} else {
+			result = result.replace("%player%", player.getDisplayName());
+		}
+		if (eco != null) {
+			result = result.replace("%balance%", Utils.parseDecimal(eco.getBalance(player) + "", 2));
+		} else {
+			result = result.replace("%balance%", "0");
+
+		}
+
+		if (pManager.getInfo(player, "lastJoin") != null) {
+			result = result.replace("%playtime%", TimeManager.getTime(pManager.getDouble(player, "playtime")
+					+ (System.currentTimeMillis() - pManager.getDouble(player, "lastJoin"))));
+		}
+
+		if (result == null || Bukkit.getPluginManager().getPlugin("Factions") == null)
+			return MSG.color(result);
+
+		if (Bukkit.getPluginManager().isPluginEnabled("Factions")) {
+			MPlayer mp = MPlayer.get(player);
+			Faction f = BoardColl.get().getFactionAt(PS.valueOf(player.getLocation()));
+			result = result.replace("%claimed%", f.getName());
+			if (mp.hasFaction()) {
+				result = result.replace("%faction%", mp.getFactionName())
+						.replace("%power%", Utils.parseDecimal(mp.getFaction().getPower() + "", 2))
+						.replace("%maxpower%", Utils.parseDecimal(mp.getFaction().getPowerMax() + "", 2))
+						.replace("%factiononline%", mp.getFaction().getOnlinePlayers().size() + "");
+			} else {
+				result = result.replace("%faction%", "None").replace("%power%", "0").replace("%maxpower%", "0")
+						.replace("%factiononline%", "0");
+			}
+		} else {
+			result = result.replace("%faction%", "None").replace("%power%", "0").replace("%maxpower%", "0");
+		}
+		// return MSG.color(result.substring(0, Math.min(result.length(), 40)));
+		return MSG.color(result);
 	}
 }

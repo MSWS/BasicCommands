@@ -58,7 +58,7 @@ public class ChatSlowCommand implements CommandExecutor {
 		}
 		
 		for(Player target:Bukkit.getOnlinePlayers())
-			MSG.tell(target, msg.replace("%player%", sender.getName())
+			MSG.tell(target, msg.replace("%player%", (sender instanceof Player)?((Player)sender).getDisplayName():sender.getName())
 					.replace("%status%", slow!=0?MSG.getString("Command.Enable", "enabled"):MSG.getString("Command.Disable", "disabled"))
 					.replace("%time%", TimeManager.getTime(slow))
 					.replace("%prefix%", MSG.getString("Command.ChatSlow.Prefix", "ChatSlow")));

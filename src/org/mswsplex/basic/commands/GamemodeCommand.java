@@ -44,24 +44,26 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
 			gm = GameMode.SPECTATOR;
 			break;
 		default:
-			Player target;
+			Player target = null;
+
 			List<Player> results = Bukkit.matchPlayer(args[0]);
 			if (results.size() == 1) {
 				target = results.get(0);
-			} else if (results.size() == 0) {
-				MSG.tell(sender, MSG.getString("Command.Gamemode.Unknown", "Unknown gamemode").replace("%prefix%",
-						MSG.getString("Command.Gamemode.Prefix", "Gamemode")));
-				return true;
-			} else {
-				MSG.tell(sender, MSG.getString("Unknown.ListPlayer", "%size% possible results").replace("%size%",
-						results.size() + ""));
-				return true;
+			}
+
+			for (Player t : Bukkit.getOnlinePlayers()) {
+				if (!t.getDisplayName().equals(t.getName())) {
+					if (args[0].equals(t.getDisplayName())) {
+						target = t;
+						break;
+					}
+				}
 			}
 			MSG.tell(sender,
 					MSG.getString("Command.Gamemode.Check", "%prefix% %player%'%s% mode is %mode%")
 							.replace("%prefix%", MSG.getString("Command.Gamemode.Prefix", "Gamemode"))
-							.replace("%player%", target.getName())
-							.replace("%s%", target.getName().toLowerCase().endsWith("s") ? "" : "s")
+							.replace("%player%", target.getDisplayName())
+							.replace("%s%", target.getDisplayName().toLowerCase().endsWith("s") ? "" : "s")
 							.replace("%mode%", MSG.camelCase(target.getGameMode().toString())));
 			return true;
 		}
@@ -103,14 +105,14 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter {
 			MSG.tell(sender,
 					MSG.getString("Command.Gamemode.Sender", "you set %player%'%s% gamemode to %mode%")
 							.replace("%prefix%", MSG.getString("Command.Gamemode.Prefix", "Gamemode"))
-							.replace("%mode%", MSG.camelCase(gm.toString())).replace("%player%", target.getName())
-							.replace("%s%", target.getName().toLowerCase().endsWith("s") ? "" : "s"));
+							.replace("%mode%", MSG.camelCase(gm.toString())).replace("%player%", target.getDisplayName())
+							.replace("%s%", target.getDisplayName().toLowerCase().endsWith("s") ? "" : "s"));
 		
 			MSG.tell(target,
 					MSG.getString("Command.Gamemode.Receiver", "%sender% set your gamemode to %mode%")
 							.replace("%prefix%", MSG.getString("Command.Gamemode.Prefix", "Gamemode"))
-							.replace("%mode%", MSG.camelCase(gm.toString())).replace("%player%", target.getName())
-							.replace("%sender%", sender.getName()));
+							.replace("%mode%", MSG.camelCase(gm.toString())).replace("%player%", target.getDisplayName())
+							.replace("%sender%", (sender instanceof Player)?((Player)sender).getDisplayName():sender.getName()));
 		
 		}
 

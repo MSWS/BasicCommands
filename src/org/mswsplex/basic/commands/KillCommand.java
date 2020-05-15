@@ -1,11 +1,13 @@
 package org.mswsplex.basic.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -14,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.mswsplex.basic.utils.MSG;
 import org.mswsplex.msws.basic.Main;
 
-public class KillCommand implements CommandExecutor {
+public class KillCommand implements CommandExecutor, TabCompleter {
 	public KillCommand() {
 		Main.plugin.getCommand("kill").setExecutor(this);
 	}
@@ -128,19 +130,22 @@ public class KillCommand implements CommandExecutor {
 			List<Player> results = Bukkit.matchPlayer(args[0]);
 			if (results.size() == 1) {
 				target = results.get(0);
-			} else if (results.size() == 0) {
+			} 
+			
+			for (Player t : Bukkit.getOnlinePlayers()) {
+				if (!t.getDisplayName().equals(t.getName())) {
+					if (args[0].equals(t.getDisplayName())) {
+						target = t;
+						break;
+					}
+				}
+			}
+			
+			
+			if (target == null) {
 				MSG.tell(sender, MSG.getString("Unknown.Player", "Unknown player"));
 				return true;
-			} else {
-				MSG.tell(sender, MSG.getString("Unknown.ListPlayer", "%size% possible results").replace("%size%",
-						results.size() + ""));
-				return true;
-			}
-		}
-
-		if (target == null) {
-			MSG.tell(sender, MSG.getString("Unknown.Player", "Unknown Player"));
-			return true;
+			} 
 		}
 
 		if (target != sender && !sender.hasPermission("basic.kill.others")) {
@@ -149,22 +154,31 @@ public class KillCommand implements CommandExecutor {
 		}
 
 		if (sender != target) {
-			MSG.tell(sender,
-					MSG.getString("Command.Kill.Sender", "%prefix% %sender% killed you")
-							.replace("%sender%", sender.getName())
+			MSG.tell(target,
+					MSG.getString("Command.Kill.Receiver", "%prefix% %sender% killed you")
+							.replace("%sender%", ((sender instanceof Player)?((Player)sender).getDisplayName():sender.getName()))
 							.replace("%prefix%", MSG.getString("Command.Kill.Prefix", "Player Manager")));
 			MSG.tell(sender,
-					MSG.getString("Command.Kill.Receiver", "%prefix% you killed %player%%s%")
+					MSG.getString("Command.Kill.Sender", "%prefix% you killed %player%%s%")
 							.replace("%prefix%", MSG.getString("Command.Kill.Prefix", "Player Manager"))
-							.replace("%player%", target.getName())
-							.replace("%s%", target.getName().toLowerCase().endsWith("s") ? "" : "s"));
+							.replace("%player%", target.getDisplayName())
+							.replace("%s%", target.getDisplayName().toLowerCase().endsWith("s") ? "" : "s"));
 		} else {
 			MSG.tell(sender, MSG.getString("Command.Kill.Self", "You killed yourself").replace("%prefix%",
 					MSG.getString("Command.Kill.Prefix", "Player Manager")));
 		}
 
 		target.setHealth(0);
-
 		return true;
+	}
+	
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		List<String> result = new ArrayList<String>();
+		for (Player t : Bukkit.getOnlinePlayers())
+			if (t.getDisplayName().toLowerCase().startsWith(args[0].toLowerCase()))
+				result.add(t.getDisplayName());
+		return result;
 	}
 }

@@ -28,13 +28,15 @@ public class VanishCommand implements CommandExecutor {
 			List<Player> results = Bukkit.matchPlayer(args[0]);
 			if (results.size() == 1) {
 				player = results.get(0);
-			} else if (results.size() == 0) {
-				MSG.tell(sender, MSG.getString("Unkown.Player", "Unknown player"));
-				return true;
-			} else {
-				MSG.tell(sender, MSG.getString("Unknown.ListPlayer", "%size% possible results").replace("%size%",
-						results.size() + ""));
-				return true;
+			}
+
+			for (Player t : Bukkit.getOnlinePlayers()) {
+				if (!t.getDisplayName().equals(t.getName())) {
+					if (args[0].equals(t.getDisplayName())) {
+						player = t;
+						break;
+					}
+				}
 			}
 		}else if(!(sender instanceof Player)) {
 			MSG.tell(sender, MSG.getString("MustBePlayer", "You must be a player"));
@@ -42,7 +44,7 @@ public class VanishCommand implements CommandExecutor {
 			player = (Player) sender;
 		}
 		
-		if(player!=null&&!sender.hasPermission("basic.vanish.others")) {
+		if(player!=null&&player!=sender&&!sender.hasPermission("basic.vanish.others")) {
 			MSG.noPerm(sender);
 			return true;
 		}
@@ -63,12 +65,12 @@ public class VanishCommand implements CommandExecutor {
 			MSG.tell(sender, MSG.getString("Command.Vanish.Sender", "%prefix% You %status% &e%player%&7''%s% vanish.")
 					.replace("%prefix%", MSG.getString("Command.Vanish.Prefix", "Vanish"))
 					.replace("%status%", pManager.isVanished(player)?MSG.getString("Command.Enable", "enabled"):MSG.getString("Command.Disable", "disabled"))
-					.replace("%player%", player.getName())
-					.replace("%s%", player.getName().toLowerCase().endsWith("s")?"":"s"));
+					.replace("%player%", player.getDisplayName())
+					.replace("%s%", player.getDisplayName().toLowerCase().endsWith("s")?"":"s"));
 			MSG.tell(player, MSG.getString("Command.Vanish.Receiver", "%prefix% &e%sender%&7 %status% &7your vanish.")
 					.replace("%prefix%", MSG.getString("Command.Vanish.Prefix", "Vanish"))
 					.replace("%status%", pManager.isVanished(player)?MSG.getString("Command.Enable", "enabled"):MSG.getString("Command.Disable", "disabled"))
-					.replace("%sender%", sender.getName()));
+					.replace("%sender%", (sender instanceof Player)?((Player)sender).getDisplayName():sender.getName()));
 		}
 		int pRank = pManager.getVanishRank(player);
 		if(pManager.isVanished(player)) {
@@ -77,6 +79,10 @@ public class VanishCommand implements CommandExecutor {
 					continue;
 				if(pRank>pManager.getVanishRank(target))
 					target.hidePlayer(player);
+			}
+		}else {
+			for(Player target:Bukkit.getOnlinePlayers()) {
+				target.showPlayer(player);
 			}
 		}
 		return true;

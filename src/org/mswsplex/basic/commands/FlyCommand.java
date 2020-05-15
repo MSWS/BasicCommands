@@ -30,15 +30,17 @@ public class FlyCommand implements CommandExecutor {
 		
 		if(args.length>0) {
 			List<Player> results = Bukkit.matchPlayer(args[0]);
-			if(results.size()==1) {
+			if (results.size() == 1) {
 				target = results.get(0);
-			}else if(results.size()==0){
-				MSG.tell(sender, MSG.getString("Unkown.Player", "Unknown player"));
-				return true;
-			}else {
-				MSG.tell(sender, MSG.getString("Unknown.ListPlayer", "%size% possible results")
-						.replace("%size%", results.size()+""));
-				return true;
+			}
+
+			for (Player t : Bukkit.getOnlinePlayers()) {
+				if (!t.getDisplayName().equals(t.getName())) {
+					if (args[0].equals(t.getDisplayName())) {
+						target = t;
+						break;
+					}
+				}
 			}
 		}
 		
@@ -60,15 +62,15 @@ public class FlyCommand implements CommandExecutor {
 			MSG.tell(sender,
 					MSG.getString("Command.Flight.Sender", "%player%%s% %status% %prefix%")
 							.replace("%prefix%", MSG.getString("Command.Flight.Prefix", "Flight"))
-							.replace("%player%", target.getName())
-							.replace("%s%", target.getName().toLowerCase().endsWith("s") ? "" : "s")
+							.replace("%player%", target.getDisplayName())
+							.replace("%s%", target.getDisplayName().toLowerCase().endsWith("s") ? "" : "s")
 							.replace("%status%", target.getAllowFlight() ? MSG.getString("Command.Enable", "enabled")
 									: MSG.getString("Command.Disable", "disabled")));
 
 			MSG.tell(target,
 					MSG.getString("Command.Flight.Receiver", "%status% %prefix%")
 							.replace("%prefix%", MSG.getString("Command.Flight.Prefix", "Flight"))
-							.replace("%sender%", sender.getName())
+							.replace("%sender%", (sender instanceof Player)?((Player)sender).getDisplayName():sender.getName())
 							.replace("%status%", target.getAllowFlight() ? MSG.getString("Command.Enable", "enabled")
 									: MSG.getString("Command.Disable", "disabled")));
 		} else {

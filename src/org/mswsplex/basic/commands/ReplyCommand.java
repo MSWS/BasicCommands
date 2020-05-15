@@ -45,13 +45,13 @@ public class ReplyCommand implements CommandExecutor {
 		msg = msg.trim();
 
 		sender.sendMessage(MSG.color(MSG.getString("Command.Message.Sender", "%sender% > %receiver% %message%")
-				.replace("%sender%", sender.getName())
-				.replace("%receiver%", target.getName()))
+				.replace("%sender%", (sender instanceof Player)?((Player)sender).getDisplayName():sender.getName())
+				.replace("%receiver%", target.getDisplayName()))
 				.replace("%message%", msg));
 		
 		target.sendMessage(MSG.color(MSG.getString("Command.Message.Receiver", "%sender% > %receiver% %message%")
-				.replace("%sender%", sender.getName())
-				.replace("%receiver%", target.getName()))
+				.replace("%sender%", (sender instanceof Player)?((Player)sender).getDisplayName():sender.getName())
+				.replace("%receiver%", target.getDisplayName()))
 				.replace("%message%", msg));
 		
 		return true;

@@ -32,7 +32,8 @@ public class EnchantCommand implements CommandExecutor {
 		ItemStack hand = player.getItemInHand();
 
 		if (hand == null || hand.getType() == Material.AIR) {
-			MSG.tell(sender, MSG.getString("Command.Enchant.InvalidHand", "You must have an item in your hand"));
+			MSG.tell(sender, MSG.getString("Command.Enchant.InvalidHand", "You must have an item in your hand")
+					.replace("%prefix%", MSG.getString("Command.Enchant.Prefix", "")));
 			return true;
 		}
 
@@ -40,15 +41,15 @@ public class EnchantCommand implements CommandExecutor {
 		Enchantment enchant = null;
 		enchant = Enchantment.getByName(Utils.getEnchant(args[0]));
 
-		if(args[0].equalsIgnoreCase("clear")) {
-			for(Enchantment ench:hand.getEnchantments().keySet())
+		if (args[0].equalsIgnoreCase("clear")) {
+			for (Enchantment ench : hand.getEnchantments().keySet())
 				hand.removeEnchantment(ench);
 
 			MSG.tell(sender, MSG.getString("Command.Enchant.Clear", "cleared enchants").replace("%prefix%",
 					MSG.getString("Command.Enchant.Prefix", "")));
 			return true;
 		}
-		
+
 		if (enchant == null) {
 			MSG.tell(sender, MSG.getString("Command.Enchant.Unknown", "unknown enchantment").replace("%prefix%",
 					MSG.getString("Command.Enchant.Prefix", "")));
@@ -67,13 +68,13 @@ public class EnchantCommand implements CommandExecutor {
 			return true;
 		}
 
-		if(level==0) {
+		if (level == 0) {
 			hand.removeEnchantment(enchant);
 			MSG.tell(sender, MSG.getString("Command.Enchant.Remove", "removed enchant").replace("%prefix%",
 					MSG.getString("Command.Enchant.Prefix", "")));
 			return true;
 		}
-		
+
 		try {
 			hand.addEnchantment(enchant, level);
 		} catch (Exception e) {

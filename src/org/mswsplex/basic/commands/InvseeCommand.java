@@ -33,18 +33,20 @@ public class InvseeCommand implements CommandExecutor {
 
 		if (args.length == 0)
 			return false;
-		Player target, player = (Player) sender;
+		Player target = null, player = (Player) sender;
 
 		List<Player> results = Bukkit.matchPlayer(args[0]);
 		if (results.size() == 1) {
 			target = results.get(0);
-		} else if (results.size() == 0) {
-			MSG.tell(sender, MSG.getString("Unknown.Player", "Unknown player"));
-			return true;
-		} else {
-			MSG.tell(sender, MSG.getString("Unknown.ListPlayer", "%size% possible results").replace("%size%",
-					results.size() + ""));
-			return true;
+		}
+
+		for (Player t : Bukkit.getOnlinePlayers()) {
+			if (!t.getDisplayName().equals(t.getName())) {
+				if (args[0].equals(t.getDisplayName())) {
+					target = t;
+					break;
+				}
+			}
 		}
 
 		if (target.hasPermission("basic.invsee.bypass")) {
@@ -59,22 +61,14 @@ public class InvseeCommand implements CommandExecutor {
 			return true;
 		}
 
-		Inventory inv = Bukkit.createInventory(target, 45,
-				target.getName() + "'" + (target.getName().toLowerCase().endsWith("s") ? "" : "s") + " Inventory");
+		Inventory inv = Bukkit.createInventory(target, 36,
+				target.getDisplayName() + "'" + (target.getDisplayName().toLowerCase().endsWith("s") ? "" : "s") + " Inventory");
 		int slot = -1;
 		for (ItemStack item : target.getInventory().getContents()) {
 			slot++;
 			if (item == null)
 				continue;
 			inv.setItem(slot, item);
-		}
-
-		slot = 4;
-		for (ItemStack item : target.getInventory().getArmorContents()) {
-			slot--;
-			if (item == null)
-				continue;
-			inv.setItem(inv.getSize() - 9 + slot, item);
 		}
 		pManager.setInfo(player, "openInventory", target.getUniqueId() + "");
 		player.openInventory(inv);

@@ -36,13 +36,15 @@ public class GodCommand implements CommandExecutor {
 				List<Player> results = Bukkit.matchPlayer(args[0]);
 				if (results.size() == 1) {
 					target = results.get(0);
-				} else if (results.size() == 0) {
-					MSG.tell(sender, MSG.getString("Unknown.Player", "Unknown player"));
-					return true;
-				} else {
-					MSG.tell(sender, MSG.getString("Unknown.ListPlayer", "%size% possible results").replace("%size%",
-							results.size() + ""));
-					return true;
+				}
+
+				for (Player t : Bukkit.getOnlinePlayers()) {
+					if (!t.getDisplayName().equals(t.getName())) {
+						if (args[0].equals(t.getDisplayName())) {
+							target = t;
+							break;
+						}
+					}
 				}
 			}
 			
@@ -60,12 +62,12 @@ public class GodCommand implements CommandExecutor {
 			}else {
 				MSG.tell(sender, MSG.getString("Command.God.Sender", "%prefix% you %status% %player%'%s% god status")
 						.replace("%prefix%", MSG.getString("Command.God.Prefix", "God"))
-						.replace("%player%", target.getName())
-						.replace("%s%", target.getName().toLowerCase().endsWith("s")?"":"s")
+						.replace("%player%", target.getDisplayName())
+						.replace("%s%", target.getDisplayName().toLowerCase().endsWith("s")?"":"s")
 						.replace("%status%", pManager.isGod(target)?MSG.getString("Command.Enable", "enabled"):MSG.getString("Command.Disable", "disabled")));
 				MSG.tell(target, MSG.getString("Command.God.Receiver", "%prefix% you %status% %player%'%s% god status")
 						.replace("%prefix%", MSG.getString("Command.God.Prefix", "God"))
-						.replace("%sender%", sender.getName())
+						.replace("%sender%", (sender instanceof Player)?((Player)sender).getDisplayName():sender.getName())
 						.replace("%status%", pManager.isGod(target)?MSG.getString("Command.Enable", "enabled"):MSG.getString("Command.Disable", "disabled")));
 			}
 			

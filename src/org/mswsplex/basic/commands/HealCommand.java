@@ -41,25 +41,25 @@ public class HealCommand implements CommandExecutor {
 					t.showPlayer(player);
 				player.setFallDistance(0);
 				player.setWalkSpeed(.2f);
-				for(PotionEffect effect:player.getActivePotionEffects())
+				for (PotionEffect effect : player.getActivePotionEffects())
 					player.removePotionEffect(effect.getType());
 			}
-				MSG.tell(sender,
-						MSG.getString("Command.Heal.Sender", "you healed %player%")
-								.replace("%prefix%", MSG.getString("Command.Heal.Prefix", "Heal"))
-								.replace("%player%", "everyone"));
+			MSG.tell(sender, MSG.getString("Command.Heal.Sender", "you healed %player%")
+					.replace("%prefix%", MSG.getString("Command.Heal.Prefix", "Heal")).replace("%player%", "everyone"));
 			return true;
 		} else {
 			List<Player> results = Bukkit.matchPlayer(args[0]);
 			if (results.size() == 1) {
 				target = results.get(0);
-			} else if (results.size() == 0) {
-				MSG.tell(sender, MSG.getString("Unknown.Player", "Unknown player"));
-				return true;
-			} else {
-				MSG.tell(sender, MSG.getString("Unknown.ListPlayer", "%size% possible results").replace("%size%",
-						results.size() + ""));
-				return true;
+			}
+
+			for (Player t : Bukkit.getOnlinePlayers()) {
+				if (!t.getDisplayName().equals(t.getName())) {
+					if (args[0].equals(t.getDisplayName())) {
+						target = t;
+						break;
+					}
+				}
 			}
 		}
 
@@ -81,17 +81,16 @@ public class HealCommand implements CommandExecutor {
 			t.showPlayer(target);
 		target.setFallDistance(0);
 		target.setWalkSpeed(.2f);
-		for(PotionEffect effect:target.getActivePotionEffects())
+		for (PotionEffect effect : target.getActivePotionEffects())
 			target.removePotionEffect(effect.getType());
 		if (target != sender) {
 			MSG.tell(sender,
 					MSG.getString("Command.Heal.Sender", "you healed %player%")
 							.replace("%prefix%", MSG.getString("Command.Heal.Prefix", "Heal"))
-							.replace("%player%", target.getName()));
-			MSG.tell(target,
-					MSG.getString("Command.Heal.Receiver", "%sender% cleared your inventory")
-							.replace("%prefix%", MSG.getString("Command.Heal.Prefix", "Heal"))
-							.replace("%sender%", sender.getName()));
+							.replace("%player%", target.getDisplayName()));
+			MSG.tell(target, MSG.getString("Command.Heal.Receiver", "%sender% cleared your inventory")
+					.replace("%prefix%", MSG.getString("Command.Heal.Prefix", "Heal")).replace("%sender%",
+							(sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName()));
 		} else {
 			MSG.tell(sender, MSG.getString("Command.Heal.Self", "you cleared your inventory").replace("%prefix%",
 					MSG.getString("Command.Heal.Prefix", "Heal")));

@@ -1,2 +1,205 @@
-Prefix: '&4[Basic Commands]&r'
-MaxSpawnLimit: 100 #Maximum amount of spawnable mobs, -1 to disable
+Prefix: '&7BasicCommands &8>>&7'
+MaxSummonLimit: 100
+MOTD: '&6&lWelcome to a server created by|&b&lMSWS'
+Links:
+  Discord: '&dThis server does not have this command setup.'
+  Rules: '&dThis server does not have this command setup.'
+  Apply: '&dThis server does not have this command setup.'
+  Buy: '&dThis server does not have this command setup.'
+JoinMessage: '&a[+] &2%player%'
+QuitMessage: '&2[-] &a%player%'
+Format:
+  default: '%prefix%&r%name%&7: %message%'
+FirstJoin:
+- announce &e%player% &7has joined for the &dFirst Time&7!
+RTP:
+  Delay: 180000
+  Range: 1000
+HelpMessage:
+- '&6Server Help'
+- '&e/help &7- Displays this message'
+Max:
+  Fill:
+    Confirm: 50000
+    HardLimit: 200000
+  ForcefieldRadius:
+    Confirm: 100
+    HardLimit: 200
+  LagAmount:
+    Confirm: 1000
+    HardLimit: 5000
+Announcements:
+  Enabled: false
+  Randomize: true
+  Rate: 6000
+  Messages:
+  - '&bMake sure to check out our Forums at &aPartyMCGames.com&b!'
+  Format:
+  - '    &d&m&l---------[&r  &5&lPartyMCGames&r  &d&m&l]--------&r'
+  - ' '
+  - ' %message%'
+  - ' '
+  - '    &d&m&l--------------------------------&r'
+Scoreboard:
+  Title: Scoreboard
+  Length: 32
+  Speed: 0.65
+  Prefix: ''
+  Lines:
+  - '&4Not set'
+Kits:
+  Default:
+    Delay: 7200000.0
+    sSword:
+      Icon: STONE_SWORD
+      Name: '&7&lDefault Sword'
+    sPick:
+      Icon: STONE_PICKAXE
+      Name: '&7&lDefault Pickaxe'
+    sAxe:
+      Icon: STONE_AXE
+      Name: '&7&lDefault Axe'
+    sShovel:
+      Icon: STONE_SPADE
+      Name: '&7&lDefault Shovel'
+    iHelmet:
+      Icon: IRON_HELMET
+      Name: '&7&lDefault Helmet'
+    iChestplate:
+      Icon: IRON_CHESTPLATE
+      Name: '&7&lDefault Chestplate'
+    iLeggings:
+      Icon: IRON_LEGGINGS
+      Name: '&7&lDefault Leggings'
+    iBoots:
+      Icon: IRON_BOOTS
+      Name: '&7&lDefault Boots'
+    wood:
+      Icon: LOG
+      Amount: 64
+    steak:
+      Icon: COOKED_BEEF
+      Amount: 16
+  PartierKey:
+    Delay: 8.64E7
+    key:
+      Commands:
+      - crate give to %player% Partier
+  RadicalKey:
+    Delay: 8.64E7
+    key:
+      Commands:
+      - crate give to %player% Radical
+  Partier:
+    Delay: 2.592E8
+    iSword:
+      Icon: IRON_SWORD
+      Name: '&6&lPartier Sword'
+    iPick:
+      Icon: IRON_PICKAXE
+      Name: '&6&lPartier Pickaxe'
+    iAxe:
+      Icon: IRON_AXE
+      Name: '&6&lPartier Axe'
+    iShovel:
+      Icon: IRON_SPADE
+      Name: '&6&lPartier Shovel'
+    dHelmet:
+      Icon: DIAMOND_HELMET
+      Name: '&6&lPartier Helmet'
+    dChestplate:
+      Icon: DIAMOND_CHESTPLATE
+      Name: '&6&lPartier Chestplate'
+    dLeggings:
+      Icon: DIAMOND_LEGGINGS
+      Name: '&6&lPartier Leggings'
+    dBoots:
+      Icon: DIAMOND_BOOTS
+      Name: '&6&lPartier Boots'
+    wood:
+      Icon: LOG
+      Amount: 64
+    wood1:
+      Icon: LOG
+      Amount: 64
+    steak:
+      Icon: COOKED_BEEF
+      Amount: 32
+    goldenApple:
+      Icon: GOLDEN_APPLE
+      Amount: 8
+    obsidian:
+      Icon: OBSIDIAN
+      Amount: 16
+  Radical:
+    Delay: 2.592E8
+    iSword:
+      Icon: IRON_SWORD
+      Name: '&d&lRadical Sword'
+      Enchantments:
+        DAMAGE_ALL:
+          Level: 2
+    iPick:
+      Icon: IRON_PICKAXE
+      Name: '&d&lRadical Pickaxe'
+      Enchantments:
+        DIG_SPEED:
+          Level: 1
+    iAxe:
+      Icon: IRON_AXE
+      Name: '&d&lRadical Axe'
+      Enchantments:
+        DIG_SPEED:
+          Level: 2
+    iShovel:
+      Icon: IRON_SPADE
+      Name: '&d&lRadical Shovel'
+      Enchantments:
+        DIG_SPEED:
+          Level: 1
+    dHelmet:
+      Icon: DIAMOND_HELMET
+      Name: '&d&lRadical Helmet'
+      Enchantments:
+        PROTECTION_ENVIRONMENTAL:
+          Level: 2
+    dChestplate:
+      Icon: DIAMOND_CHESTPLATE
+      Name: '&d&lRadical Chestplate'
+      Enchantments:
+        PROTECTION_ENVIRONMENTAL:
+          Level: 2
+    dLeggings:
+      Icon: DIAMOND_LEGGINGS
+      Name: '&d&lRadical Leggings'
+      Enchantments:
+        PROTECTION_ENVIRONMENTAL:
+          Level: 2
+    dBoots:
+      Icon: DIAMOND_BOOTS
+      Name: '&d&lRadical Boots'
+      Enchantments:
+        PROTECTION_ENVIRONMENTAL:
+          Level: 2
+    wood:
+      Icon: LOG
+      Amount: 64
+    wood1:
+      Icon: LOG
+      Amount: 64
+    cobblestone:
+      Icon: COBBLESTONE
+      Amount: 64
+    steak:
+      Icon: COOKED_BEEF
+      Amount: 64
+    goldenApple:
+      Icon: GOLDEN_APPLE
+      Amount: 16
+    gapple:
+      Icon: GOLDEN_APPLE
+      Amount: 8
+      Data: 1
+    obsidian:
+      Icon: OBSIDIAN
+      Amount: 64

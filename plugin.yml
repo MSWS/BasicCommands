@@ -2,75 +2,200 @@ name: BasicCommands
 main: org.mswsplex.msws.basic.Main
 version: 1.0
 description: Basic Commands Essential for a server
+softdepend:
+- Vault
+- NametagEdit
+- ProtocolLib
+- Cardinal
 commands:
-   fly:
-      usage: /<command> <Player>
-      description: Toggle flight
-   kill:
-      usage: /<command> [All/Range/Players/Entities]
-      description: Kills specific entities
-   clear:
-      usage: /<command> <Player>
-      description: Clears a player's inventory
-   teleport:
-      usage: /<command> [Player/All] <Player>
-      description: Teleports players
-      aliases: [tp]
-   message:
-      usage: /<command> [Player] [Message]
-      aliases: [tell,msg,w]
-      description: Message a player
-   reply:
-      usage: /<command> [Message]
-      aliases: [r]
-      description: Message your last messaged player
-   time:
-      usage: /<command> [set/add/stop/start] <day/night>
-      description: Manage the in-game time
-   freeze:
-      usage: /<command> [Player]
-      description: Freeze players
-   invsee:
-      usage: /<command> [Player]
-      description: View the inventories of other players
-   staff:
-      usage: /<command>
-      description: Displays a GUI showcasing the staff
-   gamemode:
-      usage: /<command> [survival/creative/adventure/spectator] <Player>
-      description: Changes a player's gamemode
-      aliases: [gm]
-   spawn:
-      usage: /<command> [Entity/item] <Amount/type>
-      description: Spawns in items/mobs
-   heal:
-      usage: /<command> <Player>
-      description: Heals a player
-   god:
-      usage: /<command> <Player>
-      description: Make players invulnerable
-   enchant:
-      usage: /<command> [Enchantment] <Level>
-      description: Enchant item in your hand
-   seen:
-      usage: /<command> [Player]
-      description: Get when a player last joined
-   count:
-      usage: /<command>
-      description: Gets the total amount of players that have joined
-   a:
-      usage: /<command> [Message]
-      description: Staff chat
-   ma:
-      usage: /<command> [Player] [Message]
-      description: Staff Message
-   ra:
-      usage: /<command> [Message]
-      description: Staff Respond
-   vanish:
-      usage: /<command>
-      description: Become invisible to all players
-      aliases: [v]
-   chatslow:
-      usage: /<command> <Time>
-      description: Slow down chat by a specified amount
+  fill:
+    usage: /<command>
+    description: Vanilla MC Command but with better autotab
+  fly:
+    usage: /<command> <Player>
+    description: Toggle flight
+  kill:
+    usage: /<command> [All/Range/Players/Entities]
+    description: Kills specific entities
+  clear:
+    usage: /<command> <Player>
+    description: Clears a player's inventory
+  teleport:
+    usage: /<command> [Player/All] <Player>
+    description: Teleports players
+    aliases:
+    - tp
+  message:
+    usage: /<command> [Player] [Message]
+    aliases:
+    - tell
+    - msg
+    - w
+    description: Message a player
+  reply:
+    usage: /<command> [Message]
+    aliases:
+    - r
+    description: Message your last messaged player
+  time:
+    usage: /<command> [set/add/stop/start] <day/night>
+    description: Manage the in-game time
+  freeze:
+    usage: /<command> [Player]
+    description: Freeze players
+  invsee:
+    usage: /<command> [Player]
+    description: View the inventories of other players
+  staff:
+    usage: /<command>
+    description: Displays a GUI showcasing the staff
+  gamemode:
+    usage: /<command> [survival/creative/adventure/spectator] <Player>
+    description: Changes a player's gamemode
+    aliases:
+    - gm
+  summon:
+    usage: /<command> [Entity/item] <Amount/type>
+    description: Summon in items/mobs
+  heal:
+    usage: /<command> <Player>
+    description: Heals a player
+  god:
+    usage: /<command> <Player>
+    description: Make players invulnerable
+  enchant:
+    usage: /<command> [Enchantment] <Level>
+    description: Enchant item in your hand
+  seen:
+    usage: /<command> [Player]
+    description: Get when a player last joined
+  count:
+    usage: /<command>
+    description: Gets the total amount of players that have joined
+  a:
+    usage: /<command> [Message]
+    description: Staff chat
+  ma:
+    usage: /<command> [Player] [Message]
+    description: Staff Message
+  ra:
+    usage: /<command> [Message]
+    description: Staff Respond
+  vanish:
+    usage: /<command>
+    description: Become invisible to all players
+    aliases:
+    - v
+  chatslow:
+    usage: /<command> <Time>
+    description: Slow down chat by a specified amount
+  ping:
+    usage: /<command>
+    description: Check server ping
+  shrug:
+    usage: /<command>
+    description: ¯\_(ツ)_/¯
+  tableflip:
+    usage: /<command>
+    description: (╯°□°）╯︵ ┻━┻
+  kit:
+    usage: /<command> [Kit] <Player>
+    description: Access Kits
+  motd:
+    usage: /<command> [MOTD]
+    description: Modify the server's MOTD
+  rtp:
+    usage: /<command>
+    description: Random Teleport
+    aliases:
+    - randomtp
+    - wilderness
+    - wild
+  spawn:
+    usage: /<command>
+    description: Teleport to world's spawn
+  announce:
+    usage: /<command> <perm:perm> [Message]
+    description: Broadcast a message
+  discord:
+    usage: /<command>
+    description: View the server's Discord
+  rules:
+    usage: /<command>
+    description: View the server's rules
+  playtime:
+    usage: /<command> <Player>
+    description: View how long a player has been playing
+  nick:
+    usage: /<command> <Player> [Name]
+    description: Change your nickname
+  toggle:
+    usage: /<command> [scoreboard,notify,mention,announcements]
+    description: Toggles certain features
+  tpa:
+    usage: /<command> [Player]
+    description: Request to teleport to a player
+  tpaccept:
+    usage: /<command>
+    description: Accepts a tp request
+    aliases:
+    - tpyes
+  tpdeny:
+    usage: /<command>
+    description: Denies a tp request
+    aliases:
+    - tpno
+  warp:
+    usage: /<command> [warp]
+    description: Warp to a warp
+  setwarp:
+    usage: /<command> [Warp Name]
+    description: Creates a warp
+  delwarp:
+    usage: /<command> [Warp Name]
+    description: Deletes a warp
+    aliases:
+    - removewarp
+    - deletewarp
+  2fa:
+    usage: /<command> <reset>
+  apply:
+    usage: /<command>
+  feed:
+    usage: /<command> <Player>
+    description: Feeds a player
+  ip:
+    usage: /<command> <Player>
+    description: View alts and IPs
+  fc:
+    usage: /<command> [Message]
+    description: Chat with your own faction
+  refresh:
+    usage: /<command>
+    description: Reloads configuration and language files
+  buy:
+    usage: /<command>
+    description: View the server's shop
+    aliases:
+    - purchase
+    - shop
+  aa:
+    usgae: /<command> [Message]
+    description: Advanced Admin Chat
+  help:
+    usage: /<command>
+    description: View server help
+  baltop:
+    usage: /<command>
+    description: View baltops
+  economy:
+    usage: /<command> [set/give/take] [Player] [Amount]
+    description: Manage economy
+    aliases:
+    - eco
+    - peco
+  balance:
+    usage: /<command> <Player>
+    description: View yours or another player's balance
+    aliases:
+    - bal
